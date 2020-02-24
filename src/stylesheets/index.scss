@@ -1,0 +1,12 @@
+body {
+    background: #fdfdfd;
+  }
+  
+  .nav-link {
+    cursor: pointer;
+  
+    &:hover {
+      color: #007bff;
+    }
+  }
+  
