@@ -1,17 +1,25 @@
 import React from "react";
 import Filters from "./Filters/Filters";
 import MoviesList from "./Movies/MoviesList";
+import FilterYears from "./Filters/FilterYears";
+import FilterGenre from "./Filters/FilterGenre";
 
 export default class App extends React.Component {
   constructor() {
     super();
 
-    this.state = {
+    this.initialState = {
       filters: {
-        sort_by: "popularity.desc"
+        sort_by: "popularity.desc",
+        release_years: "",
+        with_genres: []
       },
-      page: 1
+      pagination: {
+        page: 1,
+        total_pages: 1
+      }
     };
+    this.state = { ...this.initialState };
   }
 
   onChangeFilters = event => {
@@ -27,15 +35,25 @@ export default class App extends React.Component {
     });
   };
 
-  onChangePage = page => {
-    this.setState({
-      // page: page
-      page
-    });
+  onChangePagination = (
+    page,
+    total_pages = this.state.pagination.total_pages
+  ) => {
+    this.setState(prevState => ({
+      pagination: {
+        ...prevState.pagination,
+        page,
+        total_pages
+      }
+    }));
+  };
+
+  onReset = () => {
+    this.setState({ ...this.initialState });
   };
 
   render() {
-    const { filters, page } = this.state;
+    const { filters, pagination } = this.state;
     return (
       <div className="container">
         <div className="row mt-4">
@@ -45,18 +63,31 @@ export default class App extends React.Component {
                 <h3>Фильтры:</h3>
                 <Filters
                   filters={filters}
-                  page={page}
-                  onChangePage={this.onChangePage}
+                  pagination={pagination}
                   onChangeFilters={this.onChangeFilters}
+                  onChangePagination={this.onChangePagination}
+                  onReset={this.onReset}
                 />
+                <div className="App">
+                <FilterYears
+                realise_years={filters.release_years}
+                onChangeFilters={this.onChangeFilters}
+                />
+                <p>Год выхода: {filters.release_years}</p>
+
+                <FilterGenre
+                with_genres={filters.with_genres}
+                onChangeFilters={this.onChangeFilters}
+                />
+        </div>
               </div>
             </div>
           </div>
           <div className="col-8">
           <MoviesList 
-          page={page}
           onChangePage={this.onChangePage}
           filters={filters}
+          pagination={pagination}
            />
           </div>
         </div>
