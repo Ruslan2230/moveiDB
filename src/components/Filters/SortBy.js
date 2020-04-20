@@ -1,4 +1,5 @@
 import React from "react";
+
 import PropTypes from "prop-types";
 
 export default class SortBy extends React.Component {
@@ -10,7 +11,7 @@ export default class SortBy extends React.Component {
   static defaultProps = {
     options: [
       {
-        label: "Популярные по убыванию",
+        label: "Популярные пощ убыванию",
         value: "popularity.desc"
       },
       {
