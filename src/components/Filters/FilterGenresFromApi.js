@@ -14,7 +14,7 @@ export default class FilterGenresFromApi extends React.Component {
   }
   static propTypes = {
     with_genres: PropTypes.array.isRequired,
-    onChangeFilter: PropTypes.func.isRequired
+    onChangeFilters: PropTypes.func.isRequired
   };
 
   componentDidMount() {
@@ -31,8 +31,17 @@ export default class FilterGenresFromApi extends React.Component {
   }
 
   onChangeGenres = event => {
-    // const checked = event.target.checked;
-    // const value = event.target.value;
+    const { with_genres } = this.props;
+    const { checked, value } = event.target;
+    
+    this.props.onChangeFilters({
+      target: {
+        name: "with_genres",
+        value: checked
+          ? [...with_genres, value]
+          : with_genres.filter(item => Number(item) !== Number(value))
+      }
+    });
     
   };
 

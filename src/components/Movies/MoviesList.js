@@ -44,6 +44,9 @@ export default class MovieList extends Component {
     if (this.props.pagination.page !== prevProps.pagination.page) {
       this.getMovies(this.props.filters, this.props.pagination.page);
     }
+    if (this.props.filters.with_genres !== prevProps.filters.with_genres) {
+      this.getMovies(this.props.filters, 1);
+    }
   }
 
   // componentWillReceiveProps(nextProps) {
