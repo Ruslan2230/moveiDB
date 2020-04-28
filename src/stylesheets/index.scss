@@ -45,9 +45,9 @@
   border-color: #80bdff;
 }
 /* стили для чекбокса, находящегося в состоянии disabled */
-// &:disabled+label::before {
-//   background-color: #e9ecef;
-// }
+ &:disabled+label::before {
+background-color: #e9ecef;
+}
 &:checked+label::before {
   border-color: #0b76ef;
   background-color: #0b76ef;

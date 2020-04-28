@@ -1,10 +1,15 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const getYears = () => 
     Array.from(new Array(50),(_,index) => new Date().getFullYear() - index);
 
 
 export default class FilterYears extends React.Component {
+    static propTypes = {
+        release_years: PropTypes.string.isRequired,
+        onChangeFilter: PropTypes.func.isRequired
+      };
     static defaultProps = {
         years: getYears()
     };
@@ -20,9 +25,7 @@ export default class FilterYears extends React.Component {
                     value={release_years}
                     onChange={onChangeFilters}
                 >
-                    <option key={0} value="">
-                    Выберети год
-                    </option>
+                    <option key={0} value="">Выберети год</option>
                     {years.map((year,index) => 
                     <option key={index} value={year}>
                          {year}

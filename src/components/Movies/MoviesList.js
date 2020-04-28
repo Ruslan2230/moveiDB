@@ -11,22 +11,22 @@ export default class MovieList extends Component {
     };
   }
 
-  getMovies = (filters, pagination) => {
+  getMovies = (filters, page) => {
     const { sort_by , release_years, with_genres } = filters;
-    const { page } = pagination;
+    
    
-    const link = `${API_URL}/discover/movie?api_key=${API_KEY_3}&language=ru-RU&sort_by=${sort_by}&primary_release_year=${release_years}&with_genres=${with_genres}&page=${page}`;
+    const link = `${API_URL}/discover/movie?api_key=${API_KEY_3}&language=ru-RU&sort_by=${sort_by}&primary_release_year=${release_years}&with_genres=${with_genres.join(',')}&page=${page}`;
     fetch(link)
       .then(response => {
         return response.json();
       })
       .then(data => {
-        this.setState({
-          movies: data.results
-        });
-        
+          this.setState({
+            movies: data.results
+          });
+          this.props.onChangePagination ({ total_pages: data.total_pages });
       });
-  }
+  };
 
   componentDidMount() {
     this.getMovies(this.props.filters, this.props.pagination.page);

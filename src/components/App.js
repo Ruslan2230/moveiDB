@@ -1,8 +1,7 @@
 import React from "react";
 import Filters from "./Filters/Filters";
 import MoviesList from "./Movies/MoviesList";
-import FilterYears from "./Filters/FilterYears";
-import FilterGenre from "./Filters/FilterGenre";
+
 
 export default class App extends React.Component {
   constructor() {
@@ -35,17 +34,14 @@ export default class App extends React.Component {
     });
   };
 
-  onChangePagination = (
-    page,
-    total_pages = this.state.pagination.total_pages
-  ) => {
-    this.setState(prevState => ({
+  onChangePagination = ({ page, total_pages }) => {
+    const { pagination: { page: initialPage, total_pages: initialTotalPages }} = this.state;
+        this.setState({
       pagination: {
-        ...prevState.pagination,
-        page,
-        total_pages
-      }
-    }));
+        page: page || initialPage,
+        total_pages: total_pages || initialTotalPages,
+      },
+    });
   };
 
   onReset = () => {
@@ -68,24 +64,12 @@ export default class App extends React.Component {
                   onChangePagination={this.onChangePagination}
                   onReset={this.onReset}
                 />
-                <div className="App">
-                <FilterYears
-                realise_years={filters.release_years}
-                onChangeFilters={this.onChangeFilters}
-                />
-                <p>Год выхода: {filters.release_years}</p>
-
-                <FilterGenre
-                with_genres={filters.with_genres}
-                onChangeFilters={this.onChangeFilters}
-                />
-        </div>
               </div>
             </div>
           </div>
           <div className="col-8">
           <MoviesList 
-          onChangePage={this.onChangePage}
+          onChangePagination={this.onChangePagination}
           filters={filters}
           pagination={pagination}
            />
