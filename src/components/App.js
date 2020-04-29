@@ -22,8 +22,7 @@ export default class App extends React.Component {
   }
 
   onChangeFilters = event => {
-    const value = event.target.value;
-    const name = event.target.name;
+    const {value, name} = event.target;
     const newFilters = {
       ...this.state.filters,
       [name]: value
