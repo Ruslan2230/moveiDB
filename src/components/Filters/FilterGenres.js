@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export default class FilterGenres extends React.Component {
+export default class FilterGenres extends React.PureComponent {
   static propTypes = {
     genres: PropTypes.array.isRequired,
     with_genres: PropTypes.array.isRequired,

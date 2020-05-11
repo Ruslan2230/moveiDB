@@ -17,14 +17,14 @@ export default class Pagination extends React.PureComponent {
             type="button"
             className="btn btn-light"
             disabled={page === 1}
-            onClick={onChangePagination.bind(null, { page: page - 1 })}
+            onClick={onChangePagination({page: page - 1})}
           >
             Назад
           </button>
           <button
             type="button"
             className="btn btn-light"
-            onClick={onChangePagination.bind(null, { page: page + 1 })}
+            onClick={onChangePagination({page: page + 1})}
           >
             Вперед
           </button>

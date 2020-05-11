@@ -50,14 +50,14 @@ export default class MovieList extends Component {
       this.getMovies(this.props.filters, 1);
     }
    
-    if (!_.isEqual(this.props.pagination.page, prevProps.pagination.page)) {
+    if (this.props.pagination.page !== prevProps.pagination.page) {
       this.getMovies(this.props.filters, this.props.pagination.page);
     }
   }
 
   render() {
     const { movies } = this.state;
-    console.log("filters", this.props.filters);
+    // console.log("filters", this.props.filters);
     return (
       <div className="row">
         {movies.map(movie => {
