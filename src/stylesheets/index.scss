@@ -1,5 +1,31 @@
 $error: #e2061c;
 
+body, div {
+  background: #ebecf0;
+  color: #fff;
+}
+
+body,
+input,
+button {
+  font-family: "Montserrat", sans-serif;
+  letter-spacing: 1.1px;
+  font-size: 1.2rem;
+}
+
+div.form-login-container {
+  font-size: 20px;
+  background: #ebecf0;
+  &, .form-group {
+    text-shadow: 1px 1px 1px #fff;
+    color: #babecc;
+  }
+}
+
+.modal-content {
+  border: none;
+}
+
 input.invalid {
   border-color: $error;
 }
@@ -56,6 +82,7 @@ input.invalid {
  &:disabled+label::before {
 background-color: #e9ecef;
 }
+
 &:checked+label::before {
   border-color: #0b76ef;
   background-color: #0b76ef;
@@ -63,8 +90,57 @@ background-color: #e9ecef;
 }
   }
 
-
 .card-img--height {
   height: 180px;
   object-fit: cover;
 }
+
+.form-login {
+  padding: 36px;
+  width: 300px;
+  border-radius: 30px;
+  margin: 70px auto;
+  border: none;
+  box-shadow: -3px -3px 5px #fff, 3px 3px 5px #fff;
+
+  &:hover,&:focus {
+  box-shadow: -5px -5px 5px #fff, 5px 5px 5px #fff;
+  }
+
+}
+
+button, .input {
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  padding: 1rem;
+  border-radius: 320px;
+  background: #ebecf0;
+  text-shadow: 1px 1px 0 #fff;
+  border-radius: 320px;
+}
+
+.form-group {
+  display: block;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.input {
+  // margin-right: 8px;
+  box-shadow: inset 2px 2px 5px #babecc,inset -5px -5px 10px #fff;
+  width: 100%;
+  box-sizing: border-box;
+  transition: all .2s ease-in-out;
+  appearance: none;
+  &:focus {
+    box-shadow: inset 1px 1px 2px #babecc,inset -1px -1px 2px #fff;
+    background: #ebecf0;
+  }
+}
+
+// button.btn {
+//   font-weight: bold;
+//   color: #61677c;
+//   box-shadow: -5px -5px 10px #fff,inset 5px 5px 20px #babecc;
+// }

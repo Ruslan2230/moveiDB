@@ -143,7 +143,7 @@ export default class LoginForm extends React.Component {
             <label htmlFor="username">Пользователь</label>
             <input
               type="text"
-              className={classNames("form-control", {
+              className={classNames("form-control","input", {
                 invalid: errors.username
               })}
               id="username"
@@ -161,7 +161,7 @@ export default class LoginForm extends React.Component {
             <label htmlFor="password">Пароль</label>
             <input
               type="password"
-              className={classNames("form-control", {
+              className={classNames("form-control","input", {
                 invalid: errors.password
               })}
               id="password"
@@ -179,7 +179,7 @@ export default class LoginForm extends React.Component {
             <label htmlFor="password">Повторите пароль</label>
             <input
               type="password"
-              className={classNames("form-control", {
+              className={classNames("form-control","input", {
                 invalid: errors.repeatPassword
               })}
               id="repeatPassword"
