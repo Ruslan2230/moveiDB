@@ -55,7 +55,7 @@ export default class App extends React.Component {
     });
   };
 
-  onChangePagination = ({ page, total_pages }) => () => {
+  onChangePagination = ({ page, total_pages }) => {
     const { pagination: { page: initialPage, total_pages: initialTotalPages }} = this.state;
         this.setState({
       pagination: {

@@ -3,7 +3,7 @@ import { API_URL, API_KEY_3 } from "../../api/api";
 import PropTypes from "prop-types";
 import FilterGenres from "./FilterGenres";
 
-export default class FilterGenresFromApi extends React.Component {
+export default class FilterGenresFromApi extends React.PureComponent {
   constructor() {
     super();
 

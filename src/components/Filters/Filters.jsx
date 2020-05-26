@@ -27,7 +27,7 @@ export default class Filters extends React.Component {
                 release_years={release_years}
                 onChangeFilters={onChangeFilters}
                 />
-                <p>Год выхода: {release_years}</p>
+                <p>Выберите жанр:</p>
           <FilterGenresFromApi onChangeFilters={onChangeFilters} with_genres={with_genres} />
          <Pagination
           onChangePagination={onChangePagination}

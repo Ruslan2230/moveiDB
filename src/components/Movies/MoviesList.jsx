@@ -36,7 +36,7 @@ export default class MovieList extends Component {
           this.setState({
             movies: data.results
           });
-          this.props.onChangePagination ({ total_pages: data.total_pages });
+          this.props.onChangePagination({ total_pages: data.total_pages });
       });
   };
 

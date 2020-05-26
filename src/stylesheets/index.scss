@@ -1,3 +1,9 @@
+$error: #e2061c;
+
+input.invalid {
+  border-color: $error;
+}
+
 .invalid-feedback {
   display: block;
 }
