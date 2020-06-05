@@ -1,22 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export default class FilterGenres extends React.PureComponent {
-  static propTypes = {
-    genres: PropTypes.array.isRequired,
-    with_genres: PropTypes.array.isRequired,
-    onChangeGenres: PropTypes.func.isRequired
-  };
-
-  static defaultProps = {
-    genres: [],
-    with_genres: []
-  };
-
-  render() {
-    const { genres, with_genres, onChangeGenres } = this.props;
-    return (
-      <div className="form-group">
+const FilterGenres = ({ genres, with_genres, onChangeGenres }) => (
+  <div className="form-group">
           {genres.map(genre => (
              <div className="form-check" key={genre.id}>
             <input 
@@ -34,6 +20,17 @@ export default class FilterGenres extends React.PureComponent {
             </div>
           ))}
       </div>
-    );
-  }
+)
+
+FilterGenres.defaultProps = {
+  genres: [],
+  with_genres: []
 }
+
+FilterGenres.propTypes = {
+  genres: PropTypes.array.isRequired,
+  with_genres: PropTypes.array.isRequired,
+  onChangeGenres: PropTypes.func.isRequired
+}
+
+export default FilterGenres

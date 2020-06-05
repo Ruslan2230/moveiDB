@@ -7,6 +7,7 @@ import {API_URL, API_KEY_3, fetchApi} from "../api/api"
 
 const cookies = new Cookies();
 
+export const AppContext = React.createContext();
 export default class App extends React.Component {
   constructor() {
     super();
@@ -43,6 +44,14 @@ export default class App extends React.Component {
     });
   };
 
+  onLogOut = () => {
+    cookies.remove("session_id")
+    this.setState({
+      session_id: null,
+      user: null
+    });
+  };
+
   onChangeFilters = event => {
     const {value, name} = event.target;
     const newFilters = {
@@ -72,6 +81,7 @@ export default class App extends React.Component {
         `${API_URL}/account?api_key=${API_KEY_3}&session_id=${session_id}`
       ).then(user => {
         this.updateUser(user);
+        this.updateSessionId(session_id);
       });
     }
   }
@@ -81,12 +91,20 @@ export default class App extends React.Component {
   };
 
   render() {
-    const { filters, pagination, total_pages, user } = this.state;
+    const { filters, pagination, total_pages, user, session_id } = this.state;
     return (
+      <AppContext.Provider
+            value={{
+              user,
+              session_id,
+              updateUser: this.updateUser,
+              updateSessionId: this.updateSessionId,
+              onLogOut: this.onLogOut
+            }}
+          >
       <div>
          <Header 
          user={user} 
-         updateUser={this.updateUser}
          updateSessionId={this.updateSessionId}
           />
       <div className="container">
@@ -107,7 +125,7 @@ export default class App extends React.Component {
             </div>
           </div>
           <div className="col-8">
-          <MoviesList 
+          <MoviesList
           onChangePagination={this.onChangePagination}
           filters={filters}
           pagination={pagination}
@@ -116,6 +134,7 @@ export default class App extends React.Component {
         </div>
       </div>
       </div>
+       </AppContext.Provider>
     );
   }
 }
