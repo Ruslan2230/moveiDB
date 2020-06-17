@@ -10,7 +10,8 @@ export default class MoviesContainer extends Component {
     super();
 
     this.state = {
-      movies: []
+      movies: [],
+      moviesWillWatch: []
     };
   }
 

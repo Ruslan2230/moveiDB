@@ -58,7 +58,6 @@ class MoviesHOC extends React.Component {
 
   render() {
     const { movies } = this.state;
-    console.log(Component);
     return <Component movies={movies} />;
     }
 }

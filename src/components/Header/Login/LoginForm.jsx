@@ -1,7 +1,7 @@
 import React from "react";
 import CallApi from "../../../api/api";
 import classNames from "classnames";
-import AppContextHOC from "../../HOC/AppContextHOC";
+import UserContextHOC from "../HOC/UserContextHOC";
 class LoginForm extends React.Component {
   state = {
     username: "",
@@ -56,6 +56,12 @@ class LoginForm extends React.Component {
   };
 
   onSubmit = () => {
+    const {
+      values: { username, password }
+    } = this.state;
+
+    const { updateAuth, getFavoriteList, getWatchList, getUser } = this.props;
+
     this.setState({
       submitting: true
     });
@@ -63,8 +69,8 @@ class LoginForm extends React.Component {
       .then(data => {
         return CallApi.post("/authentication/token/validate_with_login", {
         body: {
-          username: this.state.username,
-          password: this.state.password,
+          username,
+          password,
           request_token: data.request_token
         }
       });
@@ -86,9 +92,20 @@ class LoginForm extends React.Component {
       })
       .then(user => {
         this.props.updateUser(user);
-        this.setState({
+        this.setState(
+          {
           submitting: false
-        });
+        },
+        () => {
+          updateAuth(user, session_id);
+        }
+        );
+      })
+      .then(() => {
+        getFavoriteList();
+      })
+      .then(() => {
+        getWatchList();
       })
       .catch(error => {
         console.log("error", error);
@@ -195,4 +212,4 @@ class LoginForm extends React.Component {
   }
 }
 
-export default AppContextHOC(LoginForm);
+export default UserContextHOC(LoginForm);

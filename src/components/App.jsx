@@ -3,11 +3,12 @@ import Filters from "./Filters/Filters";
 import MoviesList from "./Movies/MoviesList";
 import Header from "./Header/Header";
 import Cookies from "universal-cookie";
-import {API_URL, API_KEY_3, fetchApi} from "../api/api"
+import CallApi from "../api/api";
 
 const cookies = new Cookies();
 
 export const AppContext = React.createContext();
+export const UserContext = React.createContext();
 export default class App extends React.Component {
   constructor() {
     super();
@@ -23,10 +24,66 @@ export default class App extends React.Component {
       pagination: {
         page: 1,
         total_pages: 1
-      }
+      },
+        
     };
     this.state = { ...this.initialState };
   }
+
+  handleLogOut = () => {
+    const { session_id } = this.props;
+    CallApi.delete("/authentication/session", {
+      body: {
+        session_id
+      }
+    }).then(() => {
+      this.props.onLogOut();
+    });
+  };
+
+  getFavoriteList = () => {
+    const { session_id, user } = this.props;
+    return CallApi.get(`/account/${user.id}/favorite/movies`, {
+      params: {
+        session_id
+      }
+    }).then(data => {
+      let favorite_movies = data.results;
+      this.props.updateFavoriteList(favorite_movies);
+    });
+  };
+
+  updateFavoriteList = () => {
+
+  }
+
+  updateWatchList = () => {
+    
+  }
+
+  updateAuth = () => {
+    
+  }
+
+  getWatchList = () => {
+    const { session_id, user } = this.props;
+    return CallApi.get(`/account/${user.id}/watchlist/movies`, {
+      params: {
+        session_id
+      }
+    }).then(data => {
+      let watchlist = data.results;
+      this.props.updateWatchList(watchlist);
+    });
+  };
+
+  getUser = session_id => {
+    return CallApi.get("/account", {
+      params: {
+        session_id
+      }
+    });
+  };
 
   updateUser = user => {
     this.setState({
@@ -74,14 +131,24 @@ export default class App extends React.Component {
     });
   };
 
+  // componentDidMount() {
+  //   const session_id = cookies.get("session_id");
+  //   if (session_id) {
+  //     fetchApi(
+  //       `${API_URL}/account?api_key=${API_KEY_3}&session_id=${session_id}`
+  //     ).then(user => {
+  //       this.updateUser(user);
+  //       this.updateSessionId(session_id);
+  //     });
+  //   }
+  // }
   componentDidMount() {
-    const session_id = cookies.get("session_id");
+    const { session_id } = this.props;
     if (session_id) {
-      fetchApi(
-        `${API_URL}/account?api_key=${API_KEY_3}&session_id=${session_id}`
-      ).then(user => {
-        this.updateUser(user);
-        this.updateSessionId(session_id);
+      this.getUser(session_id).then(user => {
+        this.props.updateAuth(user, session_id);
+        this.getFavoriteList();
+        this.getWatchList();
       });
     }
   }
@@ -91,15 +158,28 @@ export default class App extends React.Component {
   };
 
   render() {
-    const { filters, pagination, total_pages, user, session_id } = this.state;
+    const { filters, pagination, total_pages, user, session_id, watchlist, updateAuth, favorite_movies,showModal, toggleModal} = this.state;
     return (
+      <UserContext.Provider
+          value={{
+            user,
+            updateAuth,
+            getUser: this.getUser,
+            favorite_movies,
+            getFavoriteList: this.getFavoriteList,
+            watchlist,
+            getWatchList: this.getWatchList
+          }}
+        >
       <AppContext.Provider
             value={{
               user,
               session_id,
               updateUser: this.updateUser,
               updateSessionId: this.updateSessionId,
-              onLogOut: this.onLogOut
+              onLogOut: this.onLogOut,
+              toggleModal,
+              showModal
             }}
           >
       <div>
@@ -135,6 +215,7 @@ export default class App extends React.Component {
       </div>
       </div>
        </AppContext.Provider>
+       </UserContext.Provider>
     );
   }
 }

@@ -6,7 +6,8 @@ import {
   DropdownItem
 } from "reactstrap";
 import AppContextHOC from "../HOC/AppContextHOC";
-import { fetchApi, API_URL, API_KEY_3 } from "../../api/api";
+import UserContextHOC from "../HOC/UserContextHOC";
+
 
 class UserMenu extends Component {
   state = {
@@ -19,30 +20,18 @@ class UserMenu extends Component {
     }));
   };
 
-  handleLogOut = () => {
-    fetchApi(`${API_URL}/authentication/session?api_key=${API_KEY_3}`, {
-      method: "DELETE",
-      mode: "cors",
-      headers: {
-        "Content-type": "application/json"
-      },
-      body: JSON.stringify({
-        session_id: this.props.session_id
-      })
-    }).then(() => {
-      this.props.onLogOut();
-    });
-  };
+  
 
   render() {
-    const { user } = this.props;
+    const { dropdownOpen } = this.state;
+    const { user, handleLogOut } = this.props;
     return (
       <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggleDropdown}>
         <DropdownToggle
           tag="div"
           onClick={this.toggleDropdown}
           data-toggle="dropdown"
-          aria-expanded={this.state.dropdownOpen}
+          aria-expanded={dropdownOpen}
         >
           <img
             width="40"
@@ -55,11 +44,11 @@ class UserMenu extends Component {
           />
         </DropdownToggle>
         <DropdownMenu right>
-          <DropdownItem onClick={this.handleLogOut}>Выйти</DropdownItem>
+          <DropdownItem onClick={handleLogOut}>Выйти</DropdownItem>
         </DropdownMenu>
       </Dropdown>
     );
   }
 }
 
-export default AppContextHOC(UserMenu);
+export default UserContextHOC(AppContextHOC(UserMenu));

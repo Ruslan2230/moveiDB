@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import FilterGenresHOC from "./FilterGenresHOC";
 
 const FilterGenres = ({ genres, with_genres, onChangeGenres }) => (
   <div className="form-group">
@@ -20,7 +21,7 @@ const FilterGenres = ({ genres, with_genres, onChangeGenres }) => (
             </div>
           ))}
       </div>
-)
+);
 
 FilterGenres.defaultProps = {
   genres: [],
@@ -33,4 +34,4 @@ FilterGenres.propTypes = {
   onChangeGenres: PropTypes.func.isRequired
 }
 
-export default FilterGenres
+export default FilterGenresHOC(FilterGenres);

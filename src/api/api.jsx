@@ -68,5 +68,27 @@ export const API_KEY_4 =
         }
       );
     }
+    static delete(url, options = {}) {
+      const { params = {}, body = {} } = options;
+      const queryStringParams = {
+        api_key: API_KEY_3,
+        ...params
+      };
+      return fetchApi(
+        `${API_URL}${url}?${queryString.stringify(queryStringParams)}`,
+        {
+          method: "DELETE",
+          mode: "cors",
+          headers: {
+            "Content-type": "application/json"
+          },
+          body: JSON.stringify(body)
+        }
+      );
+    }
   }
+  
+  
+  
+  
 

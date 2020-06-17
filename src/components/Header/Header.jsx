@@ -1,10 +1,11 @@
 import React from "react";
 import Login from "./Login/Login";
 import UserMenu from "./UserMenu";
+import UserContextHOC from "../HOC/UserContextHOC";
 
 class Header extends React.Component {
   render() {
-    const { updateSessionId, user } = this.props;
+    const { user } = this.props;
     return (
       <nav className="navbar navbar-dark bg-primary">
         <div className="container">
@@ -16,11 +17,11 @@ class Header extends React.Component {
               </a>
             </li>
           </ul>
-          {user ? <UserMenu /> : <Login updateSessionId={updateSessionId} />}
+          {user ? <UserMenu /> : <Login />}
           </div>
       </nav>
     );
   }
 }
 
-export default Header;
+export default UserContextHOC(Header);
