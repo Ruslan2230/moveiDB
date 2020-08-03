@@ -41,15 +41,15 @@ export default class App extends React.Component {
     });
   };
 
-  getFavoriteList = () => {
-    const { session_id, user } = this.props;
+  getFavoriteList = (user) => {
+    const { session_id} = this.state;
     return CallApi.get(`/account/${user.id}/favorite/movies`, {
       params: {
         session_id
       }
     }).then(data => {
       let favorite_movies = data.results;
-      this.props.updateFavoriteList(favorite_movies);
+      this.updateFavoriteList(favorite_movies);
     });
   };
 
@@ -61,8 +61,11 @@ export default class App extends React.Component {
     
   }
 
-  updateAuth = () => {
-    
+  updateAuth = (user,session_id) => {
+    this.setState({
+      user,
+      session_id
+    })
   }
 
   getWatchList = () => {
@@ -73,7 +76,7 @@ export default class App extends React.Component {
       }
     }).then(data => {
       let watchlist = data.results;
-      this.props.updateWatchList(watchlist);
+      this.updateWatchList(watchlist);
     });
   };
 
@@ -143,11 +146,11 @@ export default class App extends React.Component {
   //   }
   // }
   componentDidMount() {
-    const { session_id } = this.props;
+    const { session_id } = this.state;
     if (session_id) {
       this.getUser(session_id).then(user => {
-        this.props.updateAuth(user, session_id);
-        this.getFavoriteList();
+        this.updateUser(user)
+        this.getFavoriteList(user);
         this.getWatchList();
       });
     }
@@ -160,24 +163,20 @@ export default class App extends React.Component {
   render() {
     const { filters, pagination, total_pages, user, session_id, watchlist, updateAuth, favorite_movies,showModal, toggleModal} = this.state;
     return (
-      <UserContext.Provider
-          value={{
-            user,
-            updateAuth,
-            getUser: this.getUser,
-            favorite_movies,
-            getFavoriteList: this.getFavoriteList,
-            watchlist,
-            getWatchList: this.getWatchList
-          }}
-        >
+      
       <AppContext.Provider
             value={{
               user,
+              updateAuth,
               session_id,
               updateUser: this.updateUser,
               updateSessionId: this.updateSessionId,
               onLogOut: this.onLogOut,
+              getUser: this.getUser,
+              favorite_movies,
+              getFavoriteList: this.getFavoriteList,
+              watchlist,
+              getWatchList: this.getWatchList,
               toggleModal,
               showModal
             }}
@@ -215,7 +214,7 @@ export default class App extends React.Component {
       </div>
       </div>
        </AppContext.Provider>
-       </UserContext.Provider>
+       
     );
   }
 }

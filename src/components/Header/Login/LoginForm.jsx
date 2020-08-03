@@ -62,6 +62,8 @@ class LoginForm extends React.Component {
 
     const { updateAuth, getFavoriteList, getWatchList, getUser } = this.props;
 
+    let session_id;
+
     this.setState({
       submitting: true
     });
@@ -83,7 +85,7 @@ class LoginForm extends React.Component {
         });
       })
       .then(data => {
-        this.props.updateSessionId(data.session_id);
+        session_id = data.session_id;
         return CallApi.get("/account", {
           params: {
             session_id: data.session_id
@@ -91,21 +93,14 @@ class LoginForm extends React.Component {
         });
       })
       .then(user => {
-        this.props.updateUser(user);
         this.setState(
           {
           submitting: false
         },
         () => {
-          updateAuth(user, session_id);
+          this.props.updateAuth({user, session_id});
         }
         );
-      })
-      .then(() => {
-        getFavoriteList();
-      })
-      .then(() => {
-        getWatchList();
       })
       .catch(error => {
         console.log("error", error);
@@ -133,6 +128,12 @@ class LoginForm extends React.Component {
     }
   };
 
+  getClassForInput = key =>
+  classNames("form-control", {
+    invalid: this.state.errors[key]
+  });
+
+
   render() {
     const { username, password, repeatPassword, errors, submitting } = this.state;
     return (
@@ -145,9 +146,7 @@ class LoginForm extends React.Component {
             <label htmlFor="username">Пользователь</label>
             <input
               type="text"
-              className={classNames("form-control","input", {
-                invalid: errors.username
-              })}
+              className={this.getClassForInput("username")}
               id="username"
               placeholder="Пользователь"
               name="username"
@@ -163,9 +162,7 @@ class LoginForm extends React.Component {
             <label htmlFor="password">Пароль</label>
             <input
               type="password"
-              className={classNames("form-control","input", {
-                invalid: errors.password
-              })}
+              className={this.getClassForInput("password")}
               id="password"
               placeholder="Пароль"
               name="password"
@@ -181,9 +178,7 @@ class LoginForm extends React.Component {
             <label htmlFor="password">Повторите пароль</label>
             <input
               type="password"
-              className={classNames("form-control","input", {
-                invalid: errors.repeatPassword
-              })}
+              className={this.getClassForInput("repeatPassword")}
               id="repeatPassword"
               placeholder="Повторите пароль"
               name="repeatPassword"
