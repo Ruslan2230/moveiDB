@@ -6,7 +6,7 @@ import {
   DropdownItem
 } from "reactstrap";
 import AppContextHOC from "../HOC/AppContextHOC";
-import UserContextHOC from "../HOC/UserContextHOC";
+
 
 
 class UserMenu extends Component {
@@ -51,4 +51,4 @@ class UserMenu extends Component {
   }
 }
 
-export default UserContextHOC(AppContextHOC(UserMenu));
+export default AppContextHOC(UserMenu);

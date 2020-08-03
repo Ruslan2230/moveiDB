@@ -1,7 +1,7 @@
 import React from "react";
 import Login from "./Login/Login";
 import UserMenu from "./UserMenu";
-import UserContextHOC from "../HOC/UserContextHOC";
+import AppContextHOC from "../HOC/AppContextHOC";
 
 class Header extends React.Component {
   render() {
@@ -24,4 +24,4 @@ class Header extends React.Component {
   }
 }
 
-export default UserContextHOC(Header);
+export default AppContextHOC(Header);

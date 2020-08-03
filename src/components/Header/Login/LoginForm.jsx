@@ -1,7 +1,7 @@
 import React from "react";
 import CallApi from "../../../api/api";
 import classNames from "classnames";
-import UserContextHOC from "../HOC/UserContextHOC";
+import AppContextHOC from "../HOC/AppContextHOC";
 class LoginForm extends React.Component {
   state = {
     username: "",
@@ -60,7 +60,7 @@ class LoginForm extends React.Component {
       values: { username, password }
     } = this.state;
 
-    const { updateAuth, getFavoriteList, getWatchList} = this.props;
+    const { updateAuth } = this.props;
 
     let session_id;
 
@@ -101,12 +101,6 @@ class LoginForm extends React.Component {
             updateAuth({user, session_id});
         }
         );
-      })
-      .then(() => {
-        getFavoriteList();
-      })
-      .then(() => {
-        getWatchList();
       })
       .catch(error => {
         console.log("error", error);
@@ -213,4 +207,4 @@ class LoginForm extends React.Component {
   }
 }
 
-export default UserContextHOC(LoginForm);
+export default AppContextHOC(LoginForm);

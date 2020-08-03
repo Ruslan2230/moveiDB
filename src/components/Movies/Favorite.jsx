@@ -1,7 +1,6 @@
 import React from "react";
 import CallApi from "../../api/api";
 import { Star, StarBorder } from "@material-ui/icons";
-import UserContextHOC from "../HOC/UserContextHOC";
 import AppContextHOC from "../HOC/AppContextHOC";
 
 class Favorite extends React.PureComponent {
@@ -37,13 +36,12 @@ class Favorite extends React.PureComponent {
               media_id: movieId,
               favorite: !this.getCurrentFavorite(favorite_movies, movieId)
             }
-          }).then(() => {
-            getFavoriteList().then(() => {
-              this.setState({
-                isOn: false
-              });
+          }).then(() => getFavoriteList())
+          .then(() => {
+            this.setState({
+              isOn: false
             });
-          });
+          })
         }
       );
     } else {
@@ -71,6 +69,6 @@ class Favorite extends React.PureComponent {
   }
 }
 
-export default UserContextHOC(AppContextHOC(Favorite));
+export default AppContextHOC(Favorite);
 
 

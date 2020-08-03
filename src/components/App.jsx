@@ -8,7 +8,7 @@ import CallApi from "../api/api";
 const cookies = new Cookies();
 
 export const AppContext = React.createContext();
-export const UserContext = React.createContext();
+
 export default class App extends React.Component {
   constructor() {
     super();
@@ -41,8 +41,7 @@ export default class App extends React.Component {
     });
   };
 
-  getFavoriteList = (user) => {
-    const { session_id} = this.state;
+  getFavoriteList = ({user,session_id}) => {
     return CallApi.get(`/account/${user.id}/favorite/movies`, {
       params: {
         session_id
@@ -53,13 +52,6 @@ export default class App extends React.Component {
     });
   };
 
-  updateFavoriteList = () => {
-
-  }
-
-  updateWatchList = () => {
-    
-  }
 
   updateAuth = (user,session_id) => {
     this.setState({
@@ -68,8 +60,7 @@ export default class App extends React.Component {
     })
   }
 
-  getWatchList = () => {
-    const { session_id, user } = this.props;
+  getWatchList = ({user,session_id}) => {
     return CallApi.get(`/account/${user.id}/watchlist/movies`, {
       params: {
         session_id
@@ -150,11 +141,16 @@ export default class App extends React.Component {
     if (session_id) {
       this.getUser(session_id).then(user => {
         this.updateUser(user)
-        this.getFavoriteList(user);
-        this.getWatchList();
       });
     }
   }
+
+componentDidUpdate(prevProps, prevState) {
+  if(prevState.user === null && this.state.user !== null) {
+    this.getFavoriteList({user: this.props.user, session_id: this.props.session_id});
+    this.getWatchList({user: this.props.user, session_id: this.props.session_id});
+  }
+}
 
   onReset = () => {
     this.setState({ ...this.initialState });
@@ -214,7 +210,6 @@ export default class App extends React.Component {
       </div>
       </div>
        </AppContext.Provider>
-       
-    );
+       );
   }
 }

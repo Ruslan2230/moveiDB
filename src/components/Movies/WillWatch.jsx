@@ -1,7 +1,6 @@
 import React from "react";
 import CallApi from "../../api/api";
 import { Bookmark, BookmarkBorder } from "@material-ui/icons";
-import UserContextHOC from "../HOC/UserContextHOC";
 import AppContextHOC from "../HOC/AppContextHOC";
 
 class WillWatch extends React.PureComponent {
@@ -70,5 +69,5 @@ class WillWatch extends React.PureComponent {
     );
   }
 }
-export default UserContextHOC(AppContextHOC(WillWatch));
+export default AppContextHOC(WillWatch);
 
