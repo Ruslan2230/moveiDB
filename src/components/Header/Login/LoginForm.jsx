@@ -60,7 +60,7 @@ class LoginForm extends React.Component {
       values: { username, password }
     } = this.state;
 
-    const { updateAuth, getFavoriteList, getWatchList, getUser } = this.props;
+    const { updateAuth, getFavoriteList, getWatchList} = this.props;
 
     let session_id;
 
@@ -98,9 +98,15 @@ class LoginForm extends React.Component {
           submitting: false
         },
         () => {
-          this.props.updateAuth({user, session_id});
+            updateAuth({user, session_id});
         }
         );
+      })
+      .then(() => {
+        getFavoriteList();
+      })
+      .then(() => {
+        getWatchList();
       })
       .catch(error => {
         console.log("error", error);
