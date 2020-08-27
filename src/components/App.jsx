@@ -4,6 +4,7 @@ import MoviesList from "./Movies/MoviesList";
 import Header from "./Header/Header";
 import Cookies from "universal-cookie";
 import CallApi from "../api/api";
+import LoginModal from "./Header/Login/LoginModal";
 
 const cookies = new Cookies();
 
@@ -16,6 +17,9 @@ export default class App extends React.Component {
     this.initialState = {
       user: null,
       session_id: null,
+      showLoginModal: false,
+      watchMovies: [],
+      favoriteMovies: [],
       filters: {
         sort_by: "popularity.desc",
         release_years: "",
@@ -47,8 +51,9 @@ export default class App extends React.Component {
         session_id
       }
     }).then(data => {
-      let favorite_movies = data.results;
-      this.updateFavoriteList(favorite_movies);
+      this.setState({
+        favoriteMovies: data.results,
+      });
     });
   };
 
@@ -60,14 +65,20 @@ export default class App extends React.Component {
     })
   }
 
-  getWatchList = ({user,session_id}) => {
-    return CallApi.get(`/account/${user.id}/watchlist/movies`, {
+  updatewatchMovies = (watchMovies) => {
+    this.setState({
+      watchMovies
+    })
+  }
+
+  getwatchMovies = ({user,session_id}) => {
+    return CallApi.get(`/account/${user.id}/watchMovies/movies`, {
       params: {
         session_id
       }
     }).then(data => {
-      let watchlist = data.results;
-      this.updateWatchList(watchlist);
+      let watchMovies = data.results;
+      this.updatewatchMovies(watchMovies);
     });
   };
 
@@ -125,17 +136,6 @@ export default class App extends React.Component {
     });
   };
 
-  // componentDidMount() {
-  //   const session_id = cookies.get("session_id");
-  //   if (session_id) {
-  //     fetchApi(
-  //       `${API_URL}/account?api_key=${API_KEY_3}&session_id=${session_id}`
-  //     ).then(user => {
-  //       this.updateUser(user);
-  //       this.updateSessionId(session_id);
-  //     });
-  //   }
-  // }
   componentDidMount() {
     const { session_id } = this.state;
     if (session_id) {
@@ -148,7 +148,7 @@ export default class App extends React.Component {
 componentDidUpdate(prevProps, prevState) {
   if(prevState.user === null && this.state.user !== null) {
     this.getFavoriteList({user: this.props.user, session_id: this.props.session_id});
-    this.getWatchList({user: this.props.user, session_id: this.props.session_id});
+    this.getwatchMovies({user: this.props.user, session_id: this.props.session_id});
   }
 }
 
@@ -156,8 +156,14 @@ componentDidUpdate(prevProps, prevState) {
     this.setState({ ...this.initialState });
   };
 
+  toggleLoginModal = () => {
+    this.setState(prevState => ({
+   showLoginModal: !prevState.showLoginModal
+  }));
+}
+
   render() {
-    const { filters, pagination, total_pages, user, session_id, watchlist, updateAuth, favorite_movies,showModal, toggleModal} = this.state;
+    const { filters, pagination, total_pages, user, session_id, watchMovies, updateAuth, favoriteMovies,showLoginModal} = this.state;
     return (
       
       <AppContext.Provider
@@ -169,19 +175,17 @@ componentDidUpdate(prevProps, prevState) {
               updateSessionId: this.updateSessionId,
               onLogOut: this.onLogOut,
               getUser: this.getUser,
-              favorite_movies,
+              favoriteMovies,
               getFavoriteList: this.getFavoriteList,
-              watchlist,
-              getWatchList: this.getWatchList,
-              toggleModal,
-              showModal
+              watchMovies,
+              getwatchMovies: this.getwatchMovies,
+              showLoginModal,
+              toggleLoginModal: this.toggleLoginModal,
             }}
           >
       <div>
-         <Header 
-         user={user} 
-         updateSessionId={this.updateSessionId}
-          />
+        {this.state.showLoginModal ? <LoginModal /> : null }
+      <Header user={user} updateSessionId={this.updateSessionId} />
       <div className="container">
         <div className="row mt-4">
           <div className="col-4">

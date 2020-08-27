@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import CallApi from "../../api/api";
 import { Star, StarBorder } from "@material-ui/icons";
 import AppContextHOC from "../HOC/AppContextHOC";
@@ -8,62 +9,63 @@ class Favorite extends React.PureComponent {
     super();
 
     this.state = {
-      isOn: false
+      loading: false
     };
   }
 
-  markAsFavorite = () => {
+  updateLoading = (state) => {
+    this.setState({
+      loading: state,
+    });
+  }
+
+  static propType = {
+    movieId: PropTypes.number.isRequired
+  }
+
+  onClickFavorite = () => {
     const {
       user,
       session_id,
       movieId,
-      favorite_movies,
+      favoriteMovies,
       getFavoriteList,
-      toggleModal
+      toggleLoginModal
     } = this.props;
-    if (session_id) {
-      this.setState(
-        {
-          isOn: true
-        },
-        () => {
-          CallApi.post(`/account/${user.id}/favorite`, {
-            params: {
-              session_id
-            },
-            body: {
-              media_type: "movie",
-              media_id: movieId,
-              favorite: !this.getCurrentFavorite(favorite_movies, movieId)
-            }
-          }).then(() => getFavoriteList())
-          .then(() => {
-            this.setState({
-              isOn: false
-            });
-          })
-        }
-      );
-    } else {
-      toggleModal();
+
+    if (!session_id) {
+      toggleLoginModal();
     }
+    this.updateLoading(true);
+
+        CallApi.post(`/account/${user.id}/favorite`, {
+          params: {
+            session_id
+          },
+          body: {
+            media_type: "movie",
+            media_id: movieId,
+            favorite: !this.getCurrentFavorite(favoriteMovies, movieId)
+          }
+        })
+        .then(getFavoriteList)
+        .then(() => {
+          this.updateLoading(false);
+        });
   };
 
-  getCurrentFavorite = (favorite_movies, movieId) =>
-    favorite_movies.some(item => item.id === movieId);
+  isFavorite = () =>
+    this.props.favoriteMovies.some(item => item.id === this.props.movieId);
 
   render() {
-    const { isOn} = this.state;
-    const { favorite_movies, movieId } = this.props;
-    const isFavorite = this.getCurrentFavorite(favorite_movies, movieId);
-    //console.log(isFavorite);
+    const { loading } = this.state;
     return (
       <div
         className="d-inline-flex mark-favorite"
-        onClick={this.markAsFavorite}
-        style={{ pointerEvents: isOn ? "none" : "auto" }}
+        onClick={this.onClickFavorite}
+        style={{ pointerEvents: loading ? "none" : "auto" }}
       >
-        {isFavorite ? <Star /> : <StarBorder />}
+        {this.isFavorite() ? <Star /> : <StarBorder />}
       </div>
     );
   }

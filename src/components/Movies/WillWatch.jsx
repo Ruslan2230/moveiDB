@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import CallApi from "../../api/api";
 import { Bookmark, BookmarkBorder } from "@material-ui/icons";
 import AppContextHOC from "../HOC/AppContextHOC";
@@ -8,61 +9,64 @@ class WillWatch extends React.PureComponent {
     super();
 
     this.state = {
-      isOn: false
+      loading: false
     };
   }
 
-  addToWatchList = () => {
+  updateLoading = (state) => {
+    this.setState({
+      loading: state,
+    });
+  }
+
+  static propType = {
+    movieId: PropTypes.number.isRequired
+  }
+
+  addTowatchMovies = () => {
     const {
       user,
       session_id,
       movieId,
-      watchlist,
-      getWatchList,
-      showModal
+      watchMovies,
+      getwatchMovies,
+      showLoginModal
     } = this.props;
-    if (session_id) {
-      this.setState(
-        {
-          isOn: true
-        },
-        () => {
-          CallApi.post(`/account/${user.id}/watchlist`, {
+
+    if (!session_id) {
+      showLoginModal();
+      }
+    this.updateLoading(true);  
+
+      CallApi.post(`/account/${user.id}/watchMovies`, {
             params: {
               session_id
             },
             body: {
               media_type: "movie",
               media_id: movieId,
-              watchlist: !this.getCurrentWatchList(watchlist, movieId)
+              watchMovies: !this.getCurrentwatchMovies(watchMovies, movieId)
             }
           }).then(() => {
-            getWatchList().then(() => {
-              this.setState({
-                isOn: false
-              });
+            getwatchMovies().then(() => {
+              this.updateLoading(false);
             });
           });
-        }
-      );
-    } else {
-      showModal();
-    }
   };
 
-  getCurrentWatchList = (watchlist, movieId) =>
-    watchlist.some(item => item.id === movieId);
+  getCurrentwatchMovies = (watchMovies, movieId) =>
+    watchMovies.some(item => item.id === movieId);
 
   render() {
-    const { isOn } = this.state;
-    const { watchlist, movieId } = this.props;
-    const isWillWatch = this.getCurrentWatchList(watchlist, movieId);
+    const { loading } = this.state;
+    const { watchMovies, movieId } = this.props;
+    const isWillWatch = this.getCurrentwatchMovies(watchMovies, movieId);
     //console.log(isWillWatch);
     return (
       <div
         className="d-inline-flex mark-watch"
-        onClick={this.addToWatchList}
-        style={{ pointerEvents: isOn ? "none" : "auto" }}
+        onClick={this.addTowatchMovies}
+        style={{ pointerEvents: loading ? "none" : "auto" }}
       >
         {isWillWatch ? <Bookmark /> : <BookmarkBorder />}
       </div>
