@@ -28,7 +28,6 @@ class Favorite extends React.PureComponent {
       user,
       session_id,
       movieId,
-      favoriteMovies,
       getFavoriteList,
       toggleLoginModal
     } = this.props;
@@ -45,7 +44,7 @@ class Favorite extends React.PureComponent {
           body: {
             media_type: "movie",
             media_id: movieId,
-            favorite: !this.getCurrentFavorite(favoriteMovies, movieId)
+            favorite: !this.isFavorite()
           }
         })
         .then(getFavoriteList)

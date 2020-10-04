@@ -71,7 +71,7 @@ export default class App extends React.Component {
     })
   }
 
-  getwatchMovies = ({user,session_id}) => {
+  getwatchMovies = ({ user, session_id }) => {
     return CallApi.get(`/account/${user.id}/watchMovies/movies`, {
       params: {
         session_id
